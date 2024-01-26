@@ -3,7 +3,7 @@
     <string name="hello">Hello World!</string>
     <string name="description_post_author_avatar">Post author avatar</string>
     <string name="description_post_menu">Post menu</string>
-    <string name="share_button_desc">Share</string>
-    <string name="like_button_desc">Like</string>
-    <string name="view_button_desc">Views</string>
+    <string name="description_post_like">Like</string>
+    <string name="description_post_share">Share</string>
+    <string name="description_post_view">View</string>
 </resources>
