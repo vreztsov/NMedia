@@ -7,6 +7,7 @@ interface PostRepository {
 //    fun get(): LiveData<Post>
     fun gelAll(): LiveData<List<Post>>
     fun likeById(id: Long)
+    fun shareById(id: Long)
 //    fun like()
 //    fun share()
 }

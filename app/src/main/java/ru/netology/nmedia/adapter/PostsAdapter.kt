@@ -10,12 +10,14 @@ import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.NMediaUtils
 
-typealias onLikeListener = (Post) -> Unit
+typealias OnLikeListener = (Post) -> Unit
+typealias OnShareListener = (Post) -> Unit
 
-class PostsAdapter(private val onLike: onLikeListener) : ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
+class PostsAdapter(private val onLike: OnLikeListener, private val onShare: OnShareListener) :
+    ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(view, onLike)
+        return PostViewHolder(view, onLike, onShare)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -23,7 +25,11 @@ class PostsAdapter(private val onLike: onLikeListener) : ListAdapter<Post, PostV
     }
 }
 
-class PostViewHolder(private val binding: CardPostBinding, private val onLike: onLikeListener) :
+class PostViewHolder(
+    private val binding: CardPostBinding,
+    private val onLike: OnLikeListener,
+    private val onShare: OnShareListener
+) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         with(binding) {
@@ -31,8 +37,8 @@ class PostViewHolder(private val binding: CardPostBinding, private val onLike: o
             published.text = post.published
             content.text = post.content
             likes.text = NMediaUtils.numFormat(post.likes)
-//                shareCounter.text = NMediaUtils.numFormat(post.shares)
-//                viewCounter.text = NMediaUtils.numFormat(post.views)
+            shares.text = NMediaUtils.numFormat(post.shares)
+            views.text = NMediaUtils.numFormat(post.views)
             avatar.setImageResource(R.drawable.ic_netology_original_48dp)
             like.setImageResource(
                 if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
@@ -40,11 +46,14 @@ class PostViewHolder(private val binding: CardPostBinding, private val onLike: o
             like.setOnClickListener {
                 onLike(post)
             }
+            share.setOnClickListener {
+                onShare(post)
+            }
         }
     }
 }
 
-object PostDiffCallback : DiffUtil.ItemCallback<Post>(){
+object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
     override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem
 }
