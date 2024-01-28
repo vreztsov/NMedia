@@ -22,8 +22,11 @@ class PostViewModel : ViewModel() {
             if (content != it.content) {
                 repository.save(it.copy(content = content))
             }
-            edited.value = empty
+            reset()
         }
+    }
+    fun reset(){ 
+        edited.value = empty
     }
     fun likeById(id: Long) = repository.likeById(id)
     fun shareById(id: Long) = repository.shareById(id)
