@@ -2,8 +2,8 @@ package ru.netology.nmedia.util
 
 object NMediaUtils {
     private const val letters: String = "KM"
-
     fun numFormat(num: Int): String {
+        if (num == 0) return ""
         val numAsString = num.toString()
         val index = (numAsString.length - 1) / 3 - 1
         when {

@@ -8,6 +8,8 @@ interface PostRepository {
     fun gelAll(): LiveData<List<Post>>
     fun likeById(id: Long)
     fun shareById(id: Long)
+    fun removeById(id: Long)
+    fun save(post: Post)
 //    fun like()
 //    fun share()
 }
