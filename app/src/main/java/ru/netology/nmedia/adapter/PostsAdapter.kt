@@ -45,9 +45,7 @@ class PostViewHolder(
             shares.text = NMediaUtils.numFormat(post.shares)
             views.text = NMediaUtils.numFormat(post.views)
             avatar.setImageResource(R.drawable.ic_netology_original_48dp)
-            like.setImageResource(
-                if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
-            )
+            like.isChecked = post.likedByMe
             like.setOnClickListener {
                 listener.onLike(post)
             }

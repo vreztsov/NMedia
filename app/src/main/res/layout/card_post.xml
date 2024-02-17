@@ -85,16 +85,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/like"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/footer"
-        app:srcCompat="@drawable/ic_like_24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:checkable="true"
         android:layout_marginTop="@dimen/common_spacing"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/description_post_like" />
+        android:contentDescription="@string/description_post_like"
+        app:icon="@drawable/ic_like_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        style="@style/Widget.AppTheme.LikeButton"
+        />
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/like"-->
+<!--        android:layout_width="24dp"-->
+<!--        android:layout_height="24dp"-->
+<!--        android:checkable="true"-->
+<!--        android:contentDescription="@string/description_post_like"-->
+<!--        android:layout_marginTop="@dimen/common_spacing"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/footer"-->
+<!--        app:icon="@drawable/ic_like_24dp"-->
+<!--        style="@style/Widget.AppTheme.LikeButton"-->
+<!--        />-->
 
     <ImageButton
         android:id="@+id/share"
