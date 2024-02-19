@@ -41,9 +41,9 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            likes.text = NMediaUtils.numFormat(post.likes)
-            shares.text = NMediaUtils.numFormat(post.shares)
-            views.text = NMediaUtils.numFormat(post.views)
+            like.text = NMediaUtils.numFormat(post.likes)
+            share.text = NMediaUtils.numFormat(post.shares)
+            view.text = NMediaUtils.numFormat(post.views)
             avatar.setImageResource(R.drawable.ic_netology_original_48dp)
             like.isChecked = post.likedByMe
             like.setOnClickListener {
