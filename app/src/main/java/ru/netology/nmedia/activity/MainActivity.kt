@@ -1,18 +1,15 @@
 package ru.netology.nmedia.activity
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
+import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.util.AndroidUtils
-import ru.netology.nmedia.util.AndroidUtils.focusAndShowKeyboard
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -21,12 +18,16 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val viewModel: PostViewModel by viewModels()
+
+        val newPostLauncher = registerForActivityResult(NewPostActivity.NewPostContract){result ->
+            result ?: return@registerForActivityResult
+            viewModel.changeContent(result)
+            viewModel.save()
+        }
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-                binding.editMessage.setText(R.string.edit_message)
-                binding.editPreview.text = post.content
-                binding.editGroup.visibility = Group.VISIBLE
             }
 
             override fun onLike(post: Post) {
@@ -38,7 +39,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onShare(post: Post) {
-                viewModel.shareById(post.id)
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, post.content)
+                }
+                val chooser = Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                startActivity(chooser)
             }
         })
         binding.list.adapter = adapter
@@ -51,31 +58,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         viewModel.edited.observe(this) { post ->
-            if (post.id != 0L) {
-                binding.edit.setText(post.content)
-                binding.edit.focusAndShowKeyboard()
+            if (post.id == 0L) {
+                return@observe
             }
         }
-        binding.save.setOnClickListener {
-            val text = binding.edit.text.toString().trim()
-            if (text.isEmpty()) {
-                Toast.makeText(this, R.string.error_empty_content, Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            viewModel.changeContentAndSave(text)
-            closeEditor(binding, it)
-        }
-        binding.editClose.setOnClickListener {
-            viewModel.reset()
-            closeEditor(binding, it)
-        }
-    }
 
-    private fun closeEditor(binding: ActivityMainBinding, view: View){
-        binding.edit.setText("")
-        binding.edit.clearFocus()
-        AndroidUtils.hideKeyboard(view)
-        binding.editPreview.text = ""
-        binding.editGroup.visibility = Group.GONE
+        binding.add.setOnClickListener {
+            newPostLauncher.launch()
+        }
     }
 }
