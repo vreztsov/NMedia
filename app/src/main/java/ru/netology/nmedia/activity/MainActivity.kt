@@ -20,7 +20,10 @@ class MainActivity : AppCompatActivity() {
         val viewModel: PostViewModel by viewModels()
 
         val newPostLauncher = registerForActivityResult(NewPostActivity.NewPostContract){result ->
-            result ?: return@registerForActivityResult
+            result ?: let {
+                viewModel.reset()
+                return@registerForActivityResult
+            }
             viewModel.changeContent(result)
             viewModel.save()
         }
@@ -58,13 +61,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         viewModel.edited.observe(this) { post ->
-            if (post.id == 0L) {
-                return@observe
+            if (post.id != 0L) {
+                newPostLauncher.launch(post.content)
             }
         }
 
         binding.add.setOnClickListener {
-            newPostLauncher.launch()
+            newPostLauncher.launch(null)
         }
     }
 }

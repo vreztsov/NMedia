@@ -23,8 +23,8 @@ class NewPostActivity : AppCompatActivity() {
             finish()
         }
     }
-    object NewPostContract : ActivityResultContract<Unit, String?>() {
-        override fun createIntent(context: Context, input: Unit) =
+    object NewPostContract : ActivityResultContract<String?, String?>() {
+        override fun createIntent(context: Context, input: String?) =
             Intent(context, NewPostActivity::class.java)
 
         override fun parseResult(resultCode: Int, intent: Intent?): String? =
