@@ -16,4 +16,7 @@
     <string name="pencil">Карандаш</string>
     <string name="chooser_share_post">Поделиться</string>
     <string name="edit_message">Редактирование</string>
+    <string name="viewsCount">"Просмотры: "</string>
+    <string name="playVideo">Просмотр видео</string>
+    <string name="imageVideo">Обложка видео</string>
 </resources>

@@ -3,6 +3,7 @@ package ru.netology.nmedia.repository.impl
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PostVideo
 import ru.netology.nmedia.repository.PostRepository
 
 class PostRepositoryInMemoryImpl : PostRepository {
@@ -69,7 +70,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             author = "Нетология. Университет интернет-профессий будущего",
             content = "Освоение новой профессии — это не только открывающиеся возможности и перспективы, но и настоящий вызов самому себе. Приходится выходить из зоны комфорта и перестраивать привычный образ жизни: менять распорядок дня, искать время для занятий, быть готовым к возможным неудачам в начале пути. В блоге рассказали, как избежать стресса на курсах профпереподготовки → http://netolo.gy/fPD",
             published = "23 сентября в 10:12",
-            likedByMe = false
+            likedByMe = false,
+            video = PostVideo("Нетология","https://www.youtube.com/watch?v=WhWc3b3KhnY")
         ),
     ).reversed()
 

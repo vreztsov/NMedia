@@ -15,4 +15,7 @@
     <string name="pencil">Pencil</string>
     <string name="chooser_share_post">Share post</string>
     <string name="edit_message">Edit Message</string>
+    <string name="viewsCount">"Views: "</string>
+    <string name="playVideo">Play Button</string>
+    <string name="imageVideo">Video Image</string>
 </resources>
