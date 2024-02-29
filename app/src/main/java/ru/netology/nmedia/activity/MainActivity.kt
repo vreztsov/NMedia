@@ -2,7 +2,6 @@ package ru.netology.nmedia.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.R
@@ -19,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val viewModel: PostViewModel by viewModels()
 
-        val newPostLauncher = registerForActivityResult(NewPostActivity.NewPostContract){result ->
+        val newPostLauncher = registerForActivityResult(NewPostActivity.NewPostContract) { result ->
             result ?: let {
                 viewModel.reset()
                 return@registerForActivityResult
@@ -31,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
+                newPostLauncher.launch(post.content)
             }
 
             override fun onLike(post: Post) {
@@ -49,22 +49,19 @@ class MainActivity : AppCompatActivity() {
                 }
                 val chooser = Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(chooser)
+                viewModel.shareById(post.id)
             }
         })
-        binding.list.adapter = adapter
+
         viewModel.data.observe(this) { posts ->
-            val newPost = adapter.currentList.size < posts.size
+            val newPost = adapter.currentList.size < posts.size && adapter.currentList.size > 0
             adapter.submitList(posts) {
                 if (newPost) {
                     binding.list.smoothScrollToPosition(0)
                 }
             }
         }
-        viewModel.edited.observe(this) { post ->
-            if (post.id != 0L) {
-                newPostLauncher.launch(post.content)
-            }
-        }
+        binding.list.adapter = adapter
 
         binding.add.setOnClickListener {
             newPostLauncher.launch(null)
