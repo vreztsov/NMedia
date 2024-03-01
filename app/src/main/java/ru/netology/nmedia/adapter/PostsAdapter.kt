@@ -1,13 +1,9 @@
 package ru.netology.nmedia.adapter
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +17,8 @@ interface OnInteractionListener {
     fun onEdit(post: Post)
     fun onRemove(post: Post)
     fun onShare(post: Post)
+    fun onImageVideo(post: Post)
+    fun onPlayVideo(post: Post)
 }
 
 class PostsAdapter(
@@ -43,11 +41,6 @@ class PostViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    private fun doIntentToPlayURL(context: Context, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        ContextCompat.startActivity(context, intent, null)
-    }
-
     fun bind(post: Post) {
         with(binding) {
             author.text = post.author
@@ -58,29 +51,18 @@ class PostViewHolder(
             view.text = NMediaUtils.numFormat(post.views)
             avatar.setImageResource(R.drawable.ic_netology_original_48dp)
             like.isChecked = post.likedByMe
-
             layoutVideo.visibility = View.GONE
             if (post.video != null) {
                 layoutVideo.visibility = View.VISIBLE
                 txtName.text = post.video.name
                 txtViewCount.text = post.video.views.toString()
             }
-            //----------------------------------------------------
-
             playVideo.setOnClickListener {
-                if (post.video != null) {
-                    doIntentToPlayURL(it.context, post.video.url)
-                }
+                listener.onPlayVideo(post)
             }
-            //----------------------------------------------------
-
             imageVideo.setOnClickListener {
-                if (post.video != null) {
-                    doIntentToPlayURL(it.context, post.video.url)
-                }
+                listener.onImageVideo(post)
             }
-
-
             like.setOnClickListener {
                 listener.onLike(post)
             }
@@ -101,7 +83,6 @@ class PostViewHolder(
                                 listener.onEdit(post)
                                 true
                             }
-
                             else -> false
                         }
                     }

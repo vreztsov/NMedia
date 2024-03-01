@@ -1,6 +1,7 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +52,14 @@ class MainActivity : AppCompatActivity() {
                 startActivity(chooser)
                 viewModel.shareById(post.id)
             }
+
+            override fun onImageVideo(post: Post) {
+                playVideo(post)
+            }
+
+            override fun onPlayVideo(post: Post) {
+                playVideo(post)
+            }
         })
 
         viewModel.data.observe(this) { posts ->
@@ -65,6 +74,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.add.setOnClickListener {
             newPostLauncher.launch(null)
+        }
+    }
+
+    fun playVideo(post: Post){
+        if (post.video != null) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video.url))
+            startActivity(intent)
         }
     }
 }
