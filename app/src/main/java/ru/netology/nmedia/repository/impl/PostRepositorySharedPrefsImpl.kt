@@ -35,7 +35,7 @@ class PostRepositorySharedPrefsImpl(
         }
     }
 
-    override fun gelAll(): LiveData<List<Post>> = data
+    override fun getAll(): LiveData<List<Post>> = data
     override fun save(post: Post) {
         posts = if (post.id == 0L) {
             listOf(
