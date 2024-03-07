@@ -13,11 +13,11 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
-import ru.netology.nmedia.databinding.FragmentFeedBinding
+import ru.netology.nmedia.databinding.FragmentPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-class FeedFragment : Fragment() {
+class PostFragment : Fragment(R.layout.fragment_new_post) {
 
     val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
@@ -27,7 +27,8 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedBinding.inflate(
+
+        val binding = FragmentPostBinding.inflate(
             inflater,
             container,
             false
@@ -37,7 +38,7 @@ class FeedFragment : Fragment() {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
                 findNavController().navigate(
-                    R.id.action_feedFragment_to_newPostFragment,
+                    R.id.action_postFragment_to_newPostFragment,
                     Bundle().apply { textArg = post.content })
             }
 
@@ -47,6 +48,7 @@ class FeedFragment : Fragment() {
 
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
+                findNavController().navigateUp()
             }
 
             override fun onShare(post: Post) {
@@ -69,22 +71,12 @@ class FeedFragment : Fragment() {
             }
 
             override fun onPost(post: Post) {
-                viewModel.goToPost(post)
-                findNavController().navigate(R.id.action_feedFragment_to_postFragment)
+
             }
         })
-        binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val newPost = adapter.currentList.size < posts.size && adapter.currentList.size > 0
-            adapter.submitList(posts){
-                if (newPost) {
-                    binding.list.smoothScrollToPosition(0)
-                }
-            }
-        }
-
-        binding.add.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+        binding.singlePost.adapter = adapter
+        viewModel.singleData.observe(viewLifecycleOwner) { posts ->
+            adapter.submitList(posts)
         }
         return binding.root
     }
@@ -95,6 +87,4 @@ class FeedFragment : Fragment() {
             startActivity(intent)
         }
     }
-
-
 }
