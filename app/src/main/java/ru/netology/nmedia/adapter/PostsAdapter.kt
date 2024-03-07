@@ -19,6 +19,7 @@ interface OnInteractionListener {
     fun onShare(post: Post)
     fun onImageVideo(post: Post)
     fun onPlayVideo(post: Post)
+    fun onPostOpen(post: Post)
 }
 
 class PostsAdapter(
@@ -87,6 +88,9 @@ class PostViewHolder(
                         }
                     }
                 }.show()
+            }
+            root.setOnClickListener {
+                listener.onPostOpen(post)
             }
         }
     }
