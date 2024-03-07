@@ -44,6 +44,11 @@ class FeedFragment : Fragment() {
                     R.id.action_feedFragment_to_onePostFragment,
                     Bundle().apply { textArg = post.id.toString() })
             }
+
+            override fun onPost(post: Post) {
+                viewModel.goToPost(post)
+                findNavController().navigate(R.id.action_feedFragment_to_postFragment)
+            }
         })
         binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
