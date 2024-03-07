@@ -18,19 +18,11 @@ val empty = Post(
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository = PostRepositoryFileImpl(application)
     val data = repository.getAll()
-    val singleData = MutableLiveData(listOf(empty))
     val edited = MutableLiveData(empty)
-
-    init {
-
-    }
 
     fun save() {
         edited.value?.let {
             repository.save(it)
-            if (singleData.value?.get(0)?.id == it.id) {
-                singleData.value = listOf(it)
-            }
         }
         reset()
     }
@@ -52,10 +44,5 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun edit(post: Post) {
         edited.value = post
     }
-
-    fun goToPost(post: Post) {
-        singleData.value = listOf(post)
-    }
-
     fun removeById(id: Long) = repository.removeById(id)
 }
