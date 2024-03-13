@@ -19,4 +19,8 @@ object NMediaUtils {
         }
         return begin + decimal + letter
     }
+
+    const val AUTHOR = "Me"
+    const val PUBLISHED = "Now"
+
 }
