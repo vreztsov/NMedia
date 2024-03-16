@@ -1,52 +1,55 @@
 package ru.netology.nmedia.dao
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import ru.netology.nmedia.entity.PostAndVideo
 import ru.netology.nmedia.entity.PostEntity
+import ru.netology.nmedia.entity.PostVideoEntity
 
 @Dao
 interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAllPosts(): LiveData<List<PostEntity>>
 
-//    fun getAll(): LiveData<List<PostAndVideo>> {
-//
+    fun getAll(): LiveData<List<PostAndVideo>> {
+
 //        return MutableLiveData(emptyList())
-//
-////        return getAllPosts().map { list ->
-////            list.map {post ->
-////                val video = post.videoId?.let{ getVideoEntity(post.videoId)}
-////                PostAndVideo(video?.value?.get(0), post)
-////            }
-////        }
-//    }
+
+        return getAllPosts().map { list ->
+            list.map { post ->
+                val video = post.videoId?.let { getVideoEntity(post.videoId) }
+                PostAndVideo(video?.value?.get(0), post)
+            }
+        }
+    }
 
 
-//    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
-//    fun getAllWithQuery(): LiveData<List<PostAndVideo>>
+    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    fun getAllWithQuery(): LiveData<List<PostAndVideo>>
 
-//    @Query("SELECT * FROM PostVideoEntity WHERE id = :id")
-//    fun getVideoEntity(id: Long): LiveData<List<PostVideoEntity>>
+    @Query("SELECT * FROM PostVideoEntity WHERE id = :id")
+    fun getVideoEntity(id: Long): LiveData<List<PostVideoEntity>>
 
     @Insert
     fun insert(post: PostEntity)
 
-//    @Insert
-//    fun insert(postVideo: PostVideoEntity)
+    @Insert
+    fun insert(postVideo: PostVideoEntity)
 
     @Query("UPDATE PostEntity SET content = :content WHERE id = :id")
     fun updateContentById(id: Long, content: String)
 
-//    @Query("UPDATE PostVideoEntity SET name = :name, url = :url, views = :views WHERE id = :id")
-//    fun updateContentById(id: Long, name: String, url: String, views: Int)
+    @Query("UPDATE PostVideoEntity SET name = :name, url = :url, views = :views WHERE id = :id")
+    fun updateContentById(id: Long, name: String, url: String, views: Int)
     fun save(post: PostEntity) =
         if (post.id == 0L) insert(post) else updateContentById(post.id, post.content)
 
-//    fun save(postVideo: PostVideoEntity) =
-//        if (postVideo.id == 0L) insert(postVideo)
-//        else updateContentById(postVideo.id, postVideo.name, postVideo.url, postVideo.views)
+    fun save(postVideo: PostVideoEntity) =
+        if (postVideo.id == 0L) insert(postVideo)
+        else updateContentById(postVideo.id, postVideo.name, postVideo.url, postVideo.views)
 
     @Query(
         """
