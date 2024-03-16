@@ -12,6 +12,7 @@ data class Post(
     val video: PostVideo? = null
 )
 data class PostVideo(
+    val id: Long,
     val name: String = "",
     val url: String = "",
     val views: Int = 0
