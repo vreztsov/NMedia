@@ -15,13 +15,10 @@ interface PostDao {
     fun getAllPosts(): LiveData<List<PostEntity>>
 
     fun getAll(): LiveData<List<PostAndVideo>> {
-
-//        return MutableLiveData(emptyList())
-
         return getAllPosts().map { list ->
             list.map { post ->
                 val video = post.videoId?.let { getVideoEntity(post.videoId) }
-                PostAndVideo(video?.value?.get(0), post)
+                PostAndVideo(video, post)
             }
         }
     }
@@ -31,7 +28,7 @@ interface PostDao {
     fun getAllWithQuery(): LiveData<List<PostAndVideo>>
 
     @Query("SELECT * FROM PostVideoEntity WHERE id = :id")
-    fun getVideoEntity(id: Long): LiveData<List<PostVideoEntity>>
+    fun getVideoEntity(id: Long): PostVideoEntity
 
     @Insert
     fun insert(post: PostEntity)
